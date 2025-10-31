@@ -1,5 +1,5 @@
 {
-  "ver": "2.3.4",
+  "ver": "2.3.12",
   "importer": "fbx",
   "imported": true,
   "uuid": "14085ddf-eb29-4b3e-a8d5-ac0578f028a7",
@@ -26,7 +26,7 @@
       }
     },
     "c6160": {
-      "ver": "1.1.0",
+      "ver": "1.1.1",
       "importer": "gltf-mesh",
       "uuid": "14085ddf-eb29-4b3e-a8d5-ac0578f028a7@c6160",
       "imported": true,
@@ -73,7 +73,7 @@
       "displayName": "",
       "id": "8038b",
       "name": "coin.prefab",
-      "ver": "1.0.12",
+      "ver": "1.0.14",
       "imported": true,
       "files": [
         ".json"

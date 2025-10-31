@@ -1,5 +1,5 @@
 {
-  "ver": "1.0.25",
+  "ver": "1.0.26",
   "importer": "image",
   "imported": true,
   "uuid": "c85ef1f6-75a3-4313-846d-b12677718ead",
@@ -27,7 +27,7 @@
         "anisotropy": 0,
         "isUuid": true,
         "imageUuidOrDatabaseUri": "c85ef1f6-75a3-4313-846d-b12677718ead",
-        "visible": true
+        "visible": false
       },
       "displayName": "coin",
       "id": "6c48a",

@@ -12,9 +12,10 @@ export class StartGame extends Component {
     private camera!: Camera;
     @property(Node)
     private box0: Node = null!;
-
     @property(Node)
     private box1: Node = null!;
+    @property(Node)
+    private card: Node = null!;
 
     __preload () {
 
@@ -31,6 +32,12 @@ export class StartGame extends Component {
             that.resize(); 
         })
         input.on(Input.EventType.TOUCH_START, this.onTouchStart, this);
+        new Tween(this.card).repeatForever(
+            new Tween(this.card)
+            .to(4,{eulerAngles:new Vec3(0,360,0)})
+            .start()
+        ).start();
+        this.startRotationAnimation()
     }
     onTouchStart(event: EventTouch) {
         const touchPos = event.getLocation();
@@ -45,7 +52,7 @@ export class StartGame extends Component {
                 // hitNode.position.add(new Vec3(1,0,0));
                 // hitNode.position = hitNode.position.add(new Vec3(1,0,0));
                 const tempVec3 = new Vec3();
-                Vec3.add(tempVec3, hitNode.position, new Vec3(1,0,0));
+                Vec3.add(tempVec3, hitNode.position, new Vec3(0.1,0,0));
                 hitNode.setPosition(tempVec3);
             }
             if (hitNode === this.box0) {
@@ -56,7 +63,7 @@ export class StartGame extends Component {
     }
     private startRotationAnimation() {
         const rotateQuat = Quat.fromEuler(new Quat(), 150, 0, 0);
-        new Tween(this.box1)
+        new Tween(this.box0)
             .to(2, { rotation: rotateQuat }, { easing: "linear" })
             // .to(2, { eulerAngles: new Vec3(360, 0, 0) }, { easing: "linear" }) // 2秒旋转一圈
             // .repeatForever()

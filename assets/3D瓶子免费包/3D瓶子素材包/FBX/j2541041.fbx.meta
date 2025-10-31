@@ -1,5 +1,5 @@
 {
-  "ver": "2.3.4",
+  "ver": "2.3.12",
   "importer": "fbx",
   "imported": true,
   "uuid": "ba7c00b5-b92f-4f91-af49-ca0499feeca0",
@@ -15,7 +15,7 @@
         "gltfIndex": 0,
         "triangleCount": 1116
       },
-      "ver": "1.1.0",
+      "ver": "1.1.1",
       "imported": true,
       "files": [
         ".bin",
@@ -48,7 +48,7 @@
       "userData": {
         "gltfIndex": 0
       },
-      "ver": "1.0.12",
+      "ver": "1.0.14",
       "imported": true,
       "files": [
         ".json"
@@ -59,7 +59,8 @@
   "userData": {
     "imageMetas": [],
     "fbx": {
-      "smartMaterialEnabled": true
+      "smartMaterialEnabled": true,
+      "matchMeshNames": false
     },
     "lods": {
       "enable": false,
