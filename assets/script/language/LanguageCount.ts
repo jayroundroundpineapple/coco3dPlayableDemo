@@ -41,14 +41,14 @@ export class LanguageCount extends Component {
         if (!this.lable)
             return;
         let mgr = LanguageManager.instance;
-        let unit = mgr.getText(10001)
+        let unit = mgr?.getText(10001)
         if(this.autoPrefix){
-            this.lable.string = `${this.prefix}${unit}${mgr.formatUnit(this.languageNum)}${this.endFix}`;
+            this.lable.string = `${this.prefix}${unit}${mgr?.formatUnit(this.languageNum)}${this.endFix}`;
         }else{
-            this.lable.string = `${this.prefix}${mgr.formatUnit(this.languageNum)}${this.endFix}`;
+            this.lable.string = `${this.prefix}${mgr?.formatUnit(this.languageNum)}${this.endFix}`;
         }
         if(this.autoEndfix){
-            this.lable.string = `${this.prefix}${mgr.formatUnit(this.languageNum)}${this.endFix}${unit}`;
+            this.lable.string = `${this.prefix}${mgr?.formatUnit(this.languageNum)}${this.endFix}${unit}`;
         }
     }
 }
