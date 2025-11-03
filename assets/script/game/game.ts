@@ -11,24 +11,13 @@ const { ccclass, property } = _decorator;
  */
 @ccclass("Game")
 export class Game extends Component {
-    @property(Prefab)
-    ballPref: Prefab = null!;
-    @property(CameraCtrl)
-    cameraCtrl: CameraCtrl = null!;
-    @property(AudioManager)
-    audioManager: AudioManager = null!;
     @property(Node)
     leftNode:Node = null!;
     @property(Node)
     rightNode:Node = null!;
-     // There is no diamond in first board
-    initFirstBoard = false;
+    @property(Node)
+    startNode:Node = null!;
 
-    
-
-    state = Constants.GAME_STATE.READY;
-    score = 0;
-    hasRevive = false;
     __preload () {
         Constants.game = this;
     }
@@ -44,6 +33,16 @@ export class Game extends Component {
         view.setResizeCallback(() => {
             that.resize();
         })
+        this.startNode.on(Node.EventType.TOUCH_START, this.clickStart, this);
+    }
+    clickStart(){
+        this.startNode.off(Node.EventType.TOUCH_START, this.clickStart, this);
+        console.log("clickStart");
+        this.cashoutFunc();
+    }
+    cashoutFunc(){
+        PlayerAdSdk.gameEnd();
+        PlayerAdSdk.jumpStore();
     }
 
     onDestroy() {
@@ -66,5 +65,12 @@ export class Game extends Component {
         // director.getScene().getComponentsInChildren(Widget).forEach(function (t) {
         //     t.updateAlignment()
         // });
+        const scene = director.getScene();
+        if (scene) {
+            const widgets = scene.getComponentsInChildren(Widget);
+            widgets.forEach(function (t) {
+                t.updateAlignment();
+            });
+        }
     }
 }

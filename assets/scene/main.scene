@@ -26,16 +26,16 @@
         "__id__": 7
       },
       {
-        "__id__": 60
+        "__id__": 61
       },
       {
-        "__id__": 63
+        "__id__": 64
       }
     ],
     "_active": true,
     "_components": [],
     "_prefab": {
-      "__id__": 66
+      "__id__": 67
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -66,7 +66,7 @@
     },
     "autoReleaseAssets": false,
     "_globals": {
-      "__id__": 67
+      "__id__": 68
     },
     "_id": "42ecfffa-0786-408f-a8d4-5fc9353e5ba9"
   },
@@ -301,6 +301,9 @@
       },
       {
         "__id__": 59
+      },
+      {
+        "__id__": 60
       }
     ],
     "_prefab": null,
@@ -2138,6 +2141,27 @@
     "_id": "3ajb6TTgpB4o8jv4/LntyJ"
   },
   {
+    "__type__": "6b6999+5cFK4K47RCoawnB4",
+    "_name": "",
+    "_objFlags": 0,
+    "__editorExtras__": {},
+    "node": {
+      "__id__": 7
+    },
+    "_enabled": true,
+    "__prefab": null,
+    "leftNode": {
+      "__id__": 8
+    },
+    "rightNode": {
+      "__id__": 19
+    },
+    "startNode": {
+      "__id__": 40
+    },
+    "_id": "70DcokDY9CpqXu1m2LCPeM"
+  },
+  {
     "__type__": "cc.Node",
     "_name": "audioManager",
     "_objFlags": 0,
@@ -2149,10 +2173,10 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 61
+        "__id__": 62
       },
       {
-        "__id__": 62
+        "__id__": 63
       }
     ],
     "_prefab": null,
@@ -2191,7 +2215,7 @@
     "_objFlags": 0,
     "__editorExtras__": {},
     "node": {
-      "__id__": 60
+      "__id__": 61
     },
     "_enabled": true,
     "__prefab": null,
@@ -2207,7 +2231,7 @@
     "_objFlags": 0,
     "__editorExtras__": {},
     "node": {
-      "__id__": 60
+      "__id__": 61
     },
     "_enabled": true,
     "__prefab": null,
@@ -2233,7 +2257,7 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 64
+        "__id__": 65
       }
     ],
     "_prefab": null,
@@ -2272,7 +2296,7 @@
     "_objFlags": 0,
     "__editorExtras__": {},
     "node": {
-      "__id__": 63
+      "__id__": 64
     },
     "_enabled": true,
     "__prefab": null,
@@ -2284,7 +2308,7 @@
     ],
     "_visFlags": 0,
     "bakeSettings": {
-      "__id__": 65
+      "__id__": 66
     },
     "_mesh": {
       "__uuid__": "1263d74c-8167-4928-91a6-4e2672411f47@a804a",
@@ -2332,28 +2356,28 @@
   {
     "__type__": "cc.SceneGlobals",
     "ambient": {
-      "__id__": 68
-    },
-    "shadows": {
       "__id__": 69
     },
-    "_skybox": {
+    "shadows": {
       "__id__": 70
     },
-    "fog": {
+    "_skybox": {
       "__id__": 71
     },
-    "octree": {
+    "fog": {
       "__id__": 72
     },
-    "skin": {
+    "octree": {
       "__id__": 73
     },
-    "lightProbeInfo": {
+    "skin": {
       "__id__": 74
     },
-    "postSettings": {
+    "lightProbeInfo": {
       "__id__": 75
+    },
+    "postSettings": {
+      "__id__": 76
     },
     "bakedWithStationaryMainLight": false,
     "bakedWithHighpLightmap": false
