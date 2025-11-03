@@ -4,6 +4,7 @@ import { Constants } from "../data/constants";
 import { CameraCtrl } from "./camera-ctrl";
 import { AudioManager } from "./audio-manager";
 import { PlayerAdSdk } from "../PlayerAdSdk";
+import RESSpriteFrame from "../RESSpriteFrame";
 const { ccclass, property } = _decorator;
 
 /**
@@ -36,6 +37,7 @@ export class Game extends Component {
             that.resize();
         })
         this.startNode.on(Node.EventType.TOUCH_START, this.clickStart, this);
+        AudioManager.instance.playSound(AudioManager.instance.bgmAudioClip, true, 1);
         new Tween(this.boxNode)
         .to(3,{eulerAngles:new Vec3(0,360,0)},{easing:"linear"})
         .start();
@@ -55,7 +57,7 @@ export class Game extends Component {
        
     }
     private resize() {
-        let winSize = view.getVisibleSize() //View.getCanvasSize()
+        let winSize = view.getVisibleSize()
         console.log(winSize);
         let isVerTical = winSize.height > winSize.width
         this.leftNode.active = this.rightNode.active = !isVerTical
@@ -68,9 +70,6 @@ export class Game extends Component {
         } else {
             view.setResolutionPolicy(ResolutionPolicy.FIXED_HEIGHT)
         }
-        // director.getScene().getComponentsInChildren(Widget).forEach(function (t) {
-        //     t.updateAlignment()
-        // });
         const scene = director.getScene();
         if (scene) {
             const widgets = scene.getComponentsInChildren(Widget);

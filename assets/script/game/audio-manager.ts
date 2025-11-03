@@ -10,34 +10,27 @@ export class AudioManager extends Component{
     bg: AudioClip = null!;
     @property(AudioClip)
     click: AudioClip = null!;
+    @property({ type: AudioClip })
+    public bgmAudioClip: AudioClip = null!;
 
+    public static instance: AudioManager;
     public audioComp: AudioSource = null!;
 
     __preload(){
         Constants.auidoManager = this
     }
     start() {
+        AudioManager.instance = this;
         this.audioComp = this.getComponent(AudioSource)!;
     }
 
-    playSound(play = true) {
-        if(!play){
-            this.audioComp.stop();
-            return;
-        }
-
-        this.audioComp.clip = this.bg;
+    playSound(audio:AudioClip,loop:boolean = true,volume:number = 1) {
+        this.audioComp.clip = audio;
         this.audioComp.play();
+        this.audioComp.loop = loop;
+        this.audioComp.volume = volume;
     }
-
-    playClip() {
-        // this.audioComp.playOneShot(RESSpriteFrame.instance.clickAudioClip);
-        // AudioSource.prototype.playOneShot(RESSpriteFrame.instance.clickAudioClip,1)
-        Constants.auidoManager.audioComp.playOneShot(RESSpriteFrame.instance.clickAudioClip,1)
-
+    stopSound() {
+        this.audioComp.stop();
     }
-    playClip1(audio:AudioClip){
-        Constants.auidoManager.audioComp.playOneShot(audio,1)
-    }
-
 }
