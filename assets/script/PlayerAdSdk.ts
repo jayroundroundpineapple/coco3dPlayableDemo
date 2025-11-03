@@ -1,4 +1,5 @@
 import * as cc from 'cc'
+import { sys } from 'cc';
 export class PlayerAdSdk {
     static AD_TYPE = {
         "MTG": "MTG",
@@ -94,10 +95,10 @@ export class PlayerAdSdk {
         // console.log(​"isViewable " + event.isViewable);
         if (event.isViewable) {
             //启动或恢复广告
-            cc.sys["__audioSupport"].context.resume();
+            sys["__audioSupport"].context.resume();
         } else {
             //暂停广告并静音
-            cc.sys["__audioSupport"].context.suspend();
+            sys["__audioSupport"].context.suspend();
 
         }
     }
