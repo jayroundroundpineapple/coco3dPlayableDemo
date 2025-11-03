@@ -1,4 +1,4 @@
-import { AudioClip, instantiate, Node, Prefab, resources, Sprite, Tween, UIOpacity, Vec2, Vec3, view } from "cc";
+import { AudioClip, AudioSource, instantiate, Node, Prefab, resources, Sprite, Tween, UIOpacity, Vec2, Vec3, view } from "cc";
 import { LanguageManager } from "../language/LanguageManager";
 import RESSpriteFrame from "../RESSpriteFrame";
 import MoneyChange from "./MoneyChange";
@@ -29,6 +29,7 @@ export default class Anim {
         return Anim._instance;
     }
 
+    private static audioSource: AudioSource | null = null;
     /**最大数量 */
     private MusicID:any = null
     private maxNum: number = 40;
@@ -95,7 +96,7 @@ export default class Anim {
                 })
                 .call(() => {
                     if (state.moneyChangeFlag && MoneyChangeArr != null) {
-                        state.musicID = (cc as any).audioEngine.play(RESSpriteFrame.instance.numberAddAudioClip, false, 1);
+                        state.musicID = Anim.audioSource!.playOneShot(RESSpriteFrame.instance.numberAddAudioClip, 1);
                         state.moneyChangeFlag = false;
                         if (Money != null && LanguageManager.instance) {
                             // MoneyChange.play(LanguageManager.instance.formatUnit(Money),0.8,()=>{
@@ -123,12 +124,13 @@ export default class Anim {
             // Sound.ins().playsound_usd();
             resources.load(`music/addCoin`, AudioClip, (err, audioClip) => {
                 if (err) return;
-
-                cc.audioEngine.play(AudioClip, false, 1);
+                Anim.audioSource!.playOneShot(audioClip, 1);
+                // audioClip.play(AudioClip, false, 1);
             });
 
             if (state.count == state.staLen) {
-                state.musicID && cc.audioEngine.pause(state.musicID);
+                // state.musicID && cc.audioEngine.pause(state.musicID);
+                state.musicID && Anim.audioSource!.pause();
                 state.moneyChangeFlag = true;
                 if (state.fun != null) {
                     state.fun.call(state.thisObj);
