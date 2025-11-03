@@ -1,11 +1,9 @@
-import { Component, Enum, JsonAsset, sys, _decorator } from "cc";
-import { countReset } from "console";
 import { PayType, PlayableSDK } from "../sdk/PlayableSDK";
+import { LanguageComponent } from "./LanguageComponent";
+import { LanguageIcons } from "./LanguageIcons";
 import { utils } from "../utils/utils";
-
-
+import { _decorator, Component, director, Enum, JsonAsset, Node, sys } from "cc";
 const {ccclass, property} = _decorator;
-
 /**
  * 按钮点击模式
  */
@@ -18,7 +16,7 @@ export enum LanguageType {
     Spanish,        // 西班牙语
     Italian,        // 意大利语  1
     Ukrainian,      // 乌克兰语 1
-    Arabic,         //阿拉伯
+    Arabic, //阿拉伯
     Portuguese,     // 葡萄牙语 
     Indonesian,     // 印度尼西亚语
     Hindi,          // 印地语
@@ -30,8 +28,9 @@ export enum LanguageType {
     Korean,         // 韩语
     Turkish,        // 土耳其
     TW,
-    Bola,           //波兰
-    Mexico   
+    Polish,         //波兰
+    Mexico,
+    HongKong  
 }
 
 /**
@@ -58,10 +57,44 @@ export interface PayInfoType {
      */
     pay: PayAppInfo[]
 }
-
+var testLanguage:{[country:string]:string} = {
+    'jp': 'ja',
+    'us':   'en',
+    'fr':'fr',
+    'kr':'ko',
+    'es':'es',
+    'de':'de',
+    'mx':'es',
+    'th':'th',
+    'vn':'vi',
+    'br':'pt',
+    'it':'it',
+    'pl':'pl',
+    'sa':'sa',
+    'tw':'zh',
+    'hk':'zh',
+}
 var PayConfig: { [key in number]: PayInfoType } = {
+    [LanguageType.HongKong]: { 
+        ratio: 1,
+        pay: [
+            {
+                name: "PayPal",
+                title: "PayPal"
+            },
+        ]
+    },
     [LanguageType.Italian]: { // 意大利语
         ratio: 0.93,
+        pay: [
+            {
+                name: "PayPal",
+                title: "frpaypal"
+            },
+        ]
+    },
+    [LanguageType.Polish]:{ //波兰
+        ratio: 4.34,
         pay: [
             {
                 name: "PayPal",
@@ -288,50 +321,78 @@ var PayConfig: { [key in number]: PayInfoType } = {
         ]
     }
 }
+
 @ccclass
 export class LanguageManager extends Component {
 
-    public static instance: LanguageManager = null!;
+    public static instance: LanguageManager | null = null;
     @property(JsonAsset)
-    private languageAsset: JsonAsset = null!;
+    private languageAsset: JsonAsset | null = null;
 
     @property({ type: Enum(LanguageType) })
     private language: LanguageType = LanguageType.English;
     
     private config: { [key in string]: { [key in number]: string } } = {};
 
+    public testLanguage:{[country:string]:string[]} = {}
+    public testLang:string = ''
+    public testCountry:string = ''
+    public isTest:boolean = false
     protected onLoad(): void {
+        LanguageManager.instance = this
+        window['setTestLanguage'] = this.setTestLanguage.bind(this)
         this.InitLanguage();
-        if (this.languageAsset) {
-            let ids = Object.keys(this.languageAsset.json);
+        if (this.languageAsset && this.languageAsset.json) {
+            const json = this.languageAsset.json;
+            let ids = Object.keys(json);
             ids.forEach(idx => {
                 let id = parseInt(idx, 10);
-                let info = this.languageAsset.json[id];
-                let keys = Object.keys(info);
-                keys.forEach(key => {
-                    if (!this.config[key]) {
-                        this.config[key] = {}
-                    }
-                    this.config[key][id] = info[key];
-                });
+                let info = json[id];
+                if (info) {
+                    let keys = Object.keys(info);
+                    keys.forEach(key => {
+                        if (!this.config[key]) {
+                            this.config[key] = {}
+                        }
+                        this.config[key][id] = info[key];
+                    });
+                }
             });
         }
-
-        LanguageManager.instance = this;
     }
-
+    /**多语言测试 */
+    public setTestLanguage(country:string = 'jp'): void {
+        console.log('test');
+        this.isTest = true
+        this.testCountry = country
+        for(var i in testLanguage){
+            if(i == country){
+                this.testLang = testLanguage[i]
+                break;
+            }
+        }
+        this.InitLanguage()
+    }
     private InitLanguage() {
         let language: string = sys.language;
         let country = sys.languageCode.split('-')[1] 
-        // language = 'pt'
-        // country = 'br'
-        if (language.indexOf("cn") >= 0) {          // 日语（Japanese） 
+        if(this.isTest){
+            language = this.testLang
+            country = this.testCountry
+        }
+        if (language.indexOf("tw") >= 0) {          // 中国台湾繁体 
             this.language = LanguageType.TW;
         }
-        else if(country.indexOf('mx')>=0){
-            this.language = LanguageType.Mexico  //墨西哥先单独处理，有空再重写
+        if (language.indexOf("hk") >= 0) {          // 中国台湾繁体 
+            this.language = LanguageType.HongKong;
         }
-        else if (language.indexOf("sa") >= 0) {          // 日语（Japanese） 
+        else if(country.indexOf('mx')>=0){
+            this.language = LanguageType.Mexico  //墨西哥
+        }
+        else if (language.indexOf("pl") >= 0) {          // 波兰
+            this.language = LanguageType.Polish;
+        }
+        else if (language.indexOf("sa") >= 0) {          
             this.language = LanguageType.Arabic;
         } else if (language.indexOf("ja") >= 0) {          // 日语（Japanese） 
             this.language = LanguageType.Japanese;
@@ -372,14 +433,17 @@ export class LanguageManager extends Component {
         } else {
             this.language = LanguageType.English;   // 英语（English）
         }
+        if(this.isTest){
+            this.loadLanguageTexts()
+            this.loadLanguageImg(this.testCountry)
+        }
     }
 
       /**
      * 获取翻译文案
      * @param id 翻译ID
      */
-      public getText(id: number,...args: (number | undefined)[]): string {
-        console.log('jayargs',...args,args);
+      public getText(id: number,...args: any[]): string {
         let language = LanguageType[this.language];
         let keys = Object.keys(this.config);
         if (keys.indexOf(language) > -1 && args.length == 0) {
@@ -398,6 +462,7 @@ export class LanguageManager extends Component {
             let index = 0,arg:any;
             str = str.replace(/%s/gi,(s)=>{
                 arg = this.formatUnit(args[index++])
+                arg = `${LanguageManager.instance?.getText(10001) || ''}${arg}`
                 return arg != null ? arg : s
             })
         }
@@ -432,11 +497,15 @@ export class LanguageManager extends Component {
      * @param type 软件类型
      */
     public getPayAppInfo(type: PayType): PayAppInfo {
+        if (!LanguageManager.instance) {
+            throw new Error('LanguageManager instance is not initialized');
+        }
         let config = LanguageManager.instance.payConfig;
         if (type < config.pay.length)
             return config.pay[type];
-            return config.pay[0];
-        }
+        
+        return config.pay[0];
+    }
     /**
      * 获取指定语言
      * @param type 软件类型
@@ -446,4 +515,37 @@ export class LanguageManager extends Component {
         
         return language
     }
+    //更新所有挂载了多语言组件的文本节点
+    private loadLanguageTexts(): void {
+        const updateLanguageInNode = (node: Node): void => {
+            const languageComponent = node.getComponent(LanguageComponent);
+            if (languageComponent) {
+                (languageComponent as any).ChangeLanguage();
+            }
+            node.children.forEach(child => {
+                updateLanguageInNode(child);
+            });
+        };
+        const rootNode = director.getScene()?.getChildByName('Canvas');
+        if (rootNode) {
+            updateLanguageInNode(rootNode);
+        }
+    }
+    //更新所有挂载了多语言组件的图片节点
+    private loadLanguageImg(country:string = 'us'): void {
+        const updateLanguageInNode = (node: Node): void => {
+            const languageIcon = node.getComponent(LanguageIcons);
+            if (languageIcon) {
+                (languageIcon as any).initIcon();
+            }
+            node.children.forEach(child => {
+                updateLanguageInNode(child);
+            });
+        };
+        const rootNode = director.getScene()?.getChildByName('Canvas');
+        if (rootNode) {
+            updateLanguageInNode(rootNode);
+        }
+    }
 }
+window["LanguageManager"] = LanguageManager;

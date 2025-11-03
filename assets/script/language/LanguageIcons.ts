@@ -14,7 +14,7 @@ export class LanguageIcons extends Component {
 
     @property({
         type: Enum(PayType),
-        visible: function () {
+        visible: function (this:LanguageIcons) {
             return !this.isFollowLanage;
         }
     })

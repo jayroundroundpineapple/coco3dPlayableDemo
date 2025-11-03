@@ -1,5 +1,5 @@
 
-import { _decorator, Component, Node, Prefab, view, Canvas, ResolutionPolicy, director, Widget } from "cc";
+import { _decorator, Component, Node, Prefab, view, Canvas, ResolutionPolicy, director, Widget, Tween, Vec3 } from "cc";
 import { Constants } from "../data/constants";
 import { CameraCtrl } from "./camera-ctrl";
 import { AudioManager } from "./audio-manager";
@@ -11,6 +11,8 @@ const { ccclass, property } = _decorator;
  */
 @ccclass("Game")
 export class Game extends Component {
+    @property(Node)
+    boxNode:Node = null!;
     @property(Node)
     leftNode:Node = null!;
     @property(Node)
@@ -34,6 +36,9 @@ export class Game extends Component {
             that.resize();
         })
         this.startNode.on(Node.EventType.TOUCH_START, this.clickStart, this);
+        new Tween(this.boxNode)
+        .to(3,{eulerAngles:new Vec3(0,360,0)},{easing:"linear"})
+        .start();
     }
     clickStart(){
         this.startNode.off(Node.EventType.TOUCH_START, this.clickStart, this);
@@ -43,6 +48,7 @@ export class Game extends Component {
     cashoutFunc(){
         PlayerAdSdk.gameEnd();
         PlayerAdSdk.jumpStore();
+        console.log("跳转商店");
     }
 
     onDestroy() {

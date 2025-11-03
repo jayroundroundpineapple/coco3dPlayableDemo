@@ -18,10 +18,15 @@ export class LanguageCount extends Component {
     private lable: Label | RichText = null!;
 
     protected onLoad(): void {
-        if (this.getComponent(Label))
-            this.lable = this.getComponent(Label);
-        else if (this.getComponent(RichText))
-            this.lable = this.getComponent(RichText);
+        const label = this.getComponent(Label);
+        if (label) {
+            this.lable = label;
+        } else {
+            const richText = this.getComponent(RichText);
+            if (richText) {
+                this.lable = richText;
+            }
+        }
     }
 
     protected start(): void {
