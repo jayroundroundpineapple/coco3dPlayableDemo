@@ -1,5 +1,5 @@
 
-import { _decorator, Component, Node, Prefab, view, Canvas, ResolutionPolicy, director, Widget, Tween, Vec3 } from "cc";
+import { _decorator, Component, Node, Prefab, view, Canvas, ResolutionPolicy, director, Widget, Tween, Vec3, find } from "cc";
 import { Constants } from "../data/constants";
 import { CameraCtrl } from "./camera-ctrl";
 import { AudioManager } from "./audio-manager";
@@ -21,6 +21,7 @@ export class Game extends Component {
     @property(Node)
     startNode:Node = null!;
 
+    bgmFlag:boolean = false;
     __preload () {
         Constants.game = this;
     }
@@ -36,8 +37,11 @@ export class Game extends Component {
         view.setResizeCallback(() => {
             that.resize();
         })
+        find('Canvas')?.on('touchstart',()=>{
+            this.bgmFlag = true;
+            AudioManager.instance.playSound(AudioManager.instance.bgmAudioClip, true, 1);
+        });
         this.startNode.on(Node.EventType.TOUCH_START, this.clickStart, this);
-        AudioManager.instance.playSound(AudioManager.instance.bgmAudioClip, true, 1);
         new Tween(this.boxNode)
         .to(3,{eulerAngles:new Vec3(0,360,0)},{easing:"linear"})
         .start();
@@ -53,9 +57,6 @@ export class Game extends Component {
         console.log("跳转商店");
     }
 
-    onDestroy() {
-       
-    }
     private resize() {
         let winSize = view.getVisibleSize()
         console.log(winSize);
@@ -70,12 +71,12 @@ export class Game extends Component {
         } else {
             view.setResolutionPolicy(ResolutionPolicy.FIXED_HEIGHT)
         }
-        const scene = director.getScene();
-        if (scene) {
-            const widgets = scene.getComponentsInChildren(Widget);
-            widgets.forEach(function (t) {
-                t.updateAlignment();
-            });
-        }
+        director.getScene()?.getComponentsInChildren(Widget).forEach(function (t) {
+            t.updateAlignment()
+        });
+    }
+
+    onDestroy() {
+       
     }
 }
