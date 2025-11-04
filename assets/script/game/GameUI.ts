@@ -8,8 +8,8 @@ const { ccclass, property } = _decorator;
 /**
  * @zh 游戏管理类，同时也是事件监听核心对象。
  */
-@ccclass("Game")
-export class Game extends Component {
+@ccclass("GameUI")
+export class GameUI extends Component {
     @property(Node)
     boxNode:Node = null!;
     @property(Node)

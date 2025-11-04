@@ -2377,7 +2377,7 @@
     "_id": "3ajb6TTgpB4o8jv4/LntyJ"
   },
   {
-    "__type__": "6b6999+5cFK4K47RCoawnB4",
+    "__type__": "e91a86iEqxHg5Ex9sKiR5bK",
     "_name": "",
     "_objFlags": 0,
     "__editorExtras__": {},
@@ -2399,12 +2399,12 @@
       "__id__": 22
     },
     "startNode": {
-      "__id__": 47
+      "__id__": 48
     },
     "mainCamera": {
       "__id__": 6
     },
-    "_id": "70DcokDY9CpqXu1m2LCPeM"
+    "_id": "a8WyKrmV5D3LU3rtZysD+R"
   },
   {
     "__type__": "cc.Node",
@@ -2432,14 +2432,14 @@
       "__type__": "cc.Vec3",
       "x": -343.555,
       "y": -67.327,
-      "z": -336.967
+      "z": -330
     },
     "_lrot": {
       "__type__": "cc.Quat",
-      "x": 0.0939469635026768,
-      "y": -0.2154351875701651,
-      "z": 0.02082754038005452,
-      "w": 0.971765332560774
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "w": 1
     },
     "_lscale": {
       "__type__": "cc.Vec3",
@@ -2451,8 +2451,8 @@
     "_layer": 1073741824,
     "_euler": {
       "__type__": "cc.Vec3",
-      "x": 11.044,
-      "y": -25,
+      "x": 0,
+      "y": 0,
       "z": 0
     },
     "_id": "00tdez2WBGHJtcEZfr7S7R"
@@ -2598,7 +2598,7 @@
       "__type__": "cc.Vec3",
       "x": -350.599,
       "y": 18.073,
-      "z": -321.86
+      "z": -330
     },
     "_lrot": {
       "__type__": "cc.Quat",
