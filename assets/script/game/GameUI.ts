@@ -30,6 +30,12 @@ export class GameUI extends Component {
 
     bgmFlag:boolean = false;
     private isDragging3DNode: boolean = false; // 标记是否正在拖拽3D节点
+    
+    // 遮罩动画相关
+    private maskAnimationProgress: number = 0; // 动画进度 0-1
+    private maskRect1: { x: number, y: number, width: number, height: number, radius: number } | null = null; // 第一个区域参数
+    private maskRect2: { x: number, y: number, width: number, height: number, radius: number } | null = null; // 第二个区域参数
+    private maskAnimationTarget: { progress: number } = { progress: 0 }; // Tween 动画目标对象
     __preload () {
         Constants.game = this;
     }
@@ -67,17 +73,88 @@ export class GameUI extends Component {
             .repeatForever()
             .start();
     }
+    /**
+     * 绘制遮罩区域（根据动画进度）
+     */
+    private drawMaskGraphics(progress: number) {
+        const graphics = this.TestMask.getComponent(Graphics);
+        if (!graphics) return;
+        
+        // 清除之前的绘制
+        graphics.clear();
+        
+        // 绘制第一个区域（从中心点缩放）
+        if (this.maskRect1) {
+            const { x, y, width, height, radius } = this.maskRect1;
+            const currentWidth = width * progress;
+            const currentHeight = height * progress;
+            const currentX = x - (width - currentWidth) / 2; // 保持中心点不变
+            const currentY = y - (height - currentHeight) / 2;
+            const currentRadius = radius * progress;
+            graphics.roundRect(currentX, currentY, currentWidth, currentHeight, currentRadius);
+        }
+        
+        // 绘制第二个区域（从中心点缩放）
+        if (this.maskRect2) {
+            const { x, y, width, height, radius } = this.maskRect2;
+            const currentWidth = width * progress;
+            const currentHeight = height * progress;
+            const currentX = x - (width - currentWidth) / 2; // 保持中心点不变
+            const currentY = y - (height - currentHeight) / 2;
+            const currentRadius = radius * progress;
+            graphics.roundRect(currentX, currentY, currentWidth, currentHeight, currentRadius);
+        }
+        
+        graphics.fill();
+    }
+    
+    /**
+     * 初始化遮罩并播放动画
+     */
     testMaskFunc(){
-        let graphics = this.TestMask.getComponent(Graphics);
-        graphics?.roundRect(0,0,100,100,10);
+        const graphics = this.TestMask.getComponent(Graphics);
+        if (!graphics) return;
+        
+        // 保存第一个区域的最终参数
+        this.maskRect1 = {
+            x: 0,
+            y: 0,
+            width: 100,
+            height: 100,
+            radius: 10
+        };
+        
+        // 计算第二个区域的最终参数
         const btnPos = utils.convertWorldToNodeSpace(this.StartBtn, this.TestMask.node);
         if (!btnPos) return;
+        
         const btnTransform = this.StartBtn.getComponent(UITransform);
         if (!btnTransform) return;
         const btnWidth = btnTransform.width;
         const btnHeight = btnTransform.height;
-        graphics?.roundRect(btnPos.x - btnWidth / 2, btnPos.y - btnHeight / 2, 400, 145, 20);
-        graphics?.fill();
+        
+        // 保存第二个区域的最终参数
+        this.maskRect2 = {
+            x: btnPos.x - btnWidth / 2,
+            y: btnPos.y - btnHeight / 2,
+            width: 400,
+            height: 145,
+            radius: 20
+        };
+        
+        // 初始化进度为0
+        this.maskAnimationTarget.progress = 0;
+        this.maskAnimationProgress = 0;
+        
+        // 使用 Tween 动画从 0 到 1，并在每帧更新绘制
+        new Tween(this.maskAnimationTarget)
+            .to(0.6, { progress: 1 }, {
+                onUpdate: () => {
+                    this.maskAnimationProgress = this.maskAnimationTarget.progress;
+                    this.drawMaskGraphics(this.maskAnimationTarget.progress);
+                }
+            })
+            .start();
     }
     onTouchStart(event: EventTouch) {
         console.log("3D节点点击了onTouchStart");
