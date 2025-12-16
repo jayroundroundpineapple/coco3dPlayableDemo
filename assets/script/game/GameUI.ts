@@ -1,15 +1,20 @@
 
-import { _decorator, Component, Node, Prefab, view, Canvas, ResolutionPolicy, director, Widget, Tween, Vec3, find, input, Input, EventTouch, Camera, PhysicsSystem, geometry, RigidBody, EventMouse } from "cc";
+import { _decorator, Component, Node, Prefab, view, Canvas, ResolutionPolicy, director, Widget, Tween, Vec3, find, input, Input, EventTouch, Camera, PhysicsSystem, geometry, RigidBody, EventMouse, Mask, MaskComponent, Graphics, UITransform, math, Vec2 } from "cc";
 import { Constants } from "../data/constants";
 import { CameraCtrl } from "./camera-ctrl";
 import { AudioManager } from "./audio-manager";
 import { PlayerAdSdk } from "../PlayerAdSdk";
+import { utils } from "../utils/utils";
 const { ccclass, property } = _decorator;
 /**
  * @zh 游戏管理类，同时也是事件监听核心对象。
  */
 @ccclass("GameUI")
 export class GameUI extends Component {
+    @property(Node)
+    private StartBtn:Node = null!;
+    @property(Mask)
+    TestMask:Mask = null!;
     @property(Node)
     boxNode:Node = null!;
     @property(Node)
@@ -42,6 +47,7 @@ export class GameUI extends Component {
             this.bgmFlag = true;
             AudioManager.instance.playSound(AudioManager.instance.bgmAudioClip, true, 1);
         });
+        this.testMaskFunc();
         this.startNode.on(Node.EventType.TOUCH_START, this.clickStart, this);
         // 启用物理系统用于射线检测
         PhysicsSystem.instance.enable = true;
@@ -60,6 +66,18 @@ export class GameUI extends Component {
             .by(3, { eulerAngles: new Vec3(0, 360, 0) }, { easing: "linear" })
             .repeatForever()
             .start();
+    }
+    testMaskFunc(){
+        let graphics = this.TestMask.getComponent(Graphics);
+        graphics?.roundRect(0,0,100,100,10);
+        const btnPos = utils.convertWorldToNodeSpace(this.StartBtn, this.TestMask.node);
+        if (!btnPos) return;
+        const btnTransform = this.StartBtn.getComponent(UITransform);
+        if (!btnTransform) return;
+        const btnWidth = btnTransform.width;
+        const btnHeight = btnTransform.height;
+        graphics?.roundRect(btnPos.x - btnWidth / 2, btnPos.y - btnHeight / 2, 400, 145, 20);
+        graphics?.fill();
     }
     onTouchStart(event: EventTouch) {
         console.log("3D节点点击了onTouchStart");

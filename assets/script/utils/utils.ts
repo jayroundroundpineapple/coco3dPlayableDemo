@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Material, UIRenderer } from "cc";
+import { _decorator, Component, Node, Material, UIRenderer, UITransform, Vec2 } from "cc";
 const { ccclass, property } = _decorator;
 
 export const utils = {
@@ -53,5 +53,29 @@ export const utils = {
         $end = Math.max($from, $end);
         let range: number = $end - $from;
         return $from + Math.random() * range;
+    },
+    /**
+     * 将源节点的世界坐标转换为目标节点的相对坐标
+     * @param sourceNode 源节点（要转换的节点）
+     * @param targetNode 目标节点（转换到的节点空间）
+     * @returns Vec2 相对坐标，如果转换失败返回 null
+     */
+    convertWorldToNodeSpace(sourceNode: Node, targetNode: Node): Vec2 | null {
+        // 获取源节点的父节点 UITransform
+        const parentTransform = sourceNode.parent?.getComponent(UITransform);
+        if (!parentTransform) return null;
+        
+        // 将源节点的本地坐标转换为世界坐标
+        const worldPos = parentTransform.convertToWorldSpaceAR(sourceNode.position);
+        
+        // 获取目标节点的 UITransform
+        const targetTransform = targetNode.getComponent(UITransform);
+        if (!targetTransform) return null;
+        
+        // 将世界坐标转换为目标节点的节点空间坐标
+        const nodePos = targetTransform.convertToNodeSpaceAR(worldPos);
+        
+        // 返回 Vec2（只使用 x 和 y）
+        return new Vec2(nodePos.x, nodePos.y);
     }
 }
