@@ -4,7 +4,7 @@
  */
 import { _decorator, Vec3 } from "cc";
 import { AudioManager } from "../game/audio-manager";
-import { Game } from "../game/game";
+import { Game } from "../game/GameUI";
 
 //跳板类型
 enum BOARD_TYPE {
